@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadoras - Grupo 3</title>
+  <style>
+    :root {
+      --primary-color: #00f5ff;
+      --secondary-color: #ff00ff;
+      --background: #0a0a0a;
+      --text: #ffffff;
+      --text-secondary: #aaaaaa;
+      --glass: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: rgba(10, 10, 10, 0.95);
+      border-bottom: 1px solid var(--glass);
+      padding: 1rem;
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1100px;
+      margin: auto;
+    }
+    .nav-logo h2 { margin: 0; color: var(--primary-color); }
+    .nav-menu { list-style: none; display: flex; gap: 1rem; margin: 0; padding: 0; }
+    .nav-item .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .nav-item .nav-link:hover { background: var(--glass); color: var(--secondary-color); }
+
+    /* CALCULADORAS */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .calculator, .converter {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      width: 320px;
+    }
+
+    .display {
+      background: rgba(0,0,0,0.6);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      text-align: right;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+    }
+
+    button {
+      padding: 1rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: var(--glass);
+      color: var(--text);
+      transition: 0.2s;
+    }
+    button:hover { background: var(--primary-color); color: black; }
+
+    .span-2 { grid-column: span 2; }
+
+    /* HISTORIAL */
+    .history {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 1rem;
+      width: 200px;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .history h3 { margin-top: 0; color: var(--secondary-color); }
+    .history p { margin: 0.3rem 0; font-size: 0.9rem; color: var(--text-secondary); }
+
+    /* FOOTER */
+    .footer {
+      background: rgba(10, 10, 10, 0.95);
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--glass);
+      margin-top: 3rem;
+      text-align: center;
+    }
+    .footer p { margin: 0; color: var(--text-secondary); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo"><h2>GRUPO 3</h2></div>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="../index.html" class="nav-link">Inicio</a></li>
+        <li class="nav-item"><a href="#calc" class="nav-link">Calculadora</a></li>
+        <li class="nav-item"><a href="#conv" class="nav-link">Conversor</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <!-- CALCULADORA PRINCIPAL -->
+    <div class="calculator" id="calc">
+      <div class="display" id="display">0</div>
+      <div class="buttons">
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button onclick="appendOperator('%')">%</button>
+        <button onclick="appendOperator('/')">÷</button>
+
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="appendOperator('*')">×</button>
+
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="appendOperator('-')">−</button>
+
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="appendOperator('+')">+</button>
+
+        <button onclick="appendNumber('0')" class="span-2">0</button>
+        <button onclick="appendNumber('.')">.</button>
+        <button onclick="calculate()">=</button>
+
+        <button onclick="sqrt()">√</button>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="history" id="history">
+      <h3>Historial</h3>
+    </div>
+  </div>
+
+  <!-- CONVERSOR DE UNIDADES -->
+  <div class="main-container" id="conv">
+    <div class="converter">
+      <h3>Conversor de Unidades</h3>
+      <label>Kilómetros a Millas:</label>
+      <input type="number" id="km" placeholder="Km" oninput="convertKm()">
+      <p id="miles"></p>
+      <hr>
+      <label>Kilos a Libras:</label>
+      <input type="number" id="kg" placeholder="Kg" oninput="convertKg()">
+      <p id="lbs"></p>
+      <hr>
+      <label>°C a °F:</label>
+      <input type="number" id="celsius" placeholder="Celsius" oninput="convertC()">
+      <p id="fahrenheit"></p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>&copy; 2025 Grupo 3 - Universidad O&M</p>
+    <p>Tecnología y Servicios de Internet | Sección 611</p>
+  </footer>
+
+  <script>
+    const display = document.getElementById("display");
+    const historyDiv = document.getElementById("history");
+    let currentInput = "";
+
+    function updateDisplay() {
+      display.textContent = currentInput || "0";
+    }
+
+    function appendNumber(number) {
+      currentInput += number;
+      updateDisplay();
+    }
+
+    function appendOperator(operator) {
+      if (currentInput === "") return;
+      const lastChar = currentInput.slice(-1);
+      if ("+-*/%".includes(lastChar)) return;
+      currentInput += operator;
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentInput = "";
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      currentInput = currentInput.slice(0, -1);
+      updateDisplay();
+    }
+
+    function sqrt() {
+      try {
+        let value = parseFloat(currentInput);
+        if (!isNaN(value)) {
+          let result = Math.sqrt(value);
+          addHistory(`√${value} = ${result}`);
+          currentInput = result.toString();
+          updateDisplay();
+        }
+      } catch { currentInput = "Error"; updateDisplay(); }
+    }
+
+    function calculate() {
+      try {
+        let expression = currentInput.replace(/%/g, "/100");
+        let result = Function("return " + expression)();
+        result = parseFloat(result.toFixed(10));
+        addHistory(`${currentInput} = ${result}`);
+        currentInput = result.toString();
+      } catch {
+        currentInput = "Error";
+      }
+      updateDisplay();
+    }
+
+    function addHistory(entry) {
+      let p = document.createElement("p");
+      p.textContent = entry;
+      historyDiv.appendChild(p);
+    }
+
+    // CONVERSORES
+    function convertKm() {
+      let km = document.getElementById("km").value;
+      document.getElementById("miles").textContent = km ? (km * 0.621371).toFixed(4) + " mi" : "";
+    }
+    function convertKg() {
+      let kg = document.getElementById("kg").value;
+      document.getElementById("lbs").textContent = kg ? (kg * 2.20462).toFixed(4) + " lbs" : "";
+    }
+    function convertC() {
+      let c = document.getElementById("celsius").value;
+      document.getElementById("fahrenheit").textContent = c ? ((c * 9/5) + 32).toFixed(2) + " °F" : "";
+    }
+
+    // ENTRADA POR TECLADO
+    document.addEventListener("keydown", (e) => {
+      if (!isNaN(e.key) || e.key === ".") {
+        appendNumber(e.key);
+      } else if ("+-*/%".includes(e.key)) {
+        appendOperator(e.key);
+      } else if (e.key === "Enter") {
+        calculate();
+      } else if (e.key === "Backspace") {
+        deleteLast();
+      } else if (e.key.toLowerCase() === "c") {
+        clearDisplay();
+      }
+    });
+  </script>
+</body>
+</html>

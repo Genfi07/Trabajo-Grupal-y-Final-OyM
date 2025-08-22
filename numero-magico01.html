@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Número Mágico - Grupo 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /*Este es el Reset basico: quitamos margenes, rellenos y ajustamosel modelo de la caja*/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+         
+        /* Variables de colores y estilos reutilizables, estos son los colores que se utilizaran en todo el codigo */
+
+        :root {
+            --primary-color: #00f5ff; /* Azul fosforescente */
+            --secondary-color: #0066cc; /* Azul más oscuro */
+            --accent-color: #ff6b35; /* Naranja de acento */
+            --dark-bg: #0a0a0a; /* Fondo principal oscuro */
+            --darker-bg: #050505; /* Fondo aún más oscuro */
+            --light-bg: #1a1a1a; /* Fondo gris oscuro */
+            --text-primary: #ffffff; /* Texto principal blanco */
+            --text-secondary: #b0b0b0; /* Texto secundario gris claro */
+            --metallic: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Degradado tipo metálico */
+            --holographic: linear-gradient(45deg, #00f5ff, #0066cc, #00f5ff); /* Degradado con efecto holográfico */
+            --glass: rgba(255, 255, 255, 0.1); /* Fondo semitransparente tipo vidrio */
+            --shadow: 0 8px 32px rgba(0, 245, 255, 0.3); /* Sombra brillante azul */
+            --success: #00ff8c; /* Verde éxito */
+            --warning: #ffcc00; /* Amarillo advertencia */
+            --danger: #ff3860; /* Rojo error */
+        }
+
+         /* Configuración básica del cuerpo */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark-bg); /* Fondo negro */
+            color: var(--text-primary); /* Texto blanco */
+            line-height: 1.6;
+            overflow-x: hidden; /* Evita scroll lateral */
+        }
+
+         /* -------- NAVBAR -------- */
+        .navbar {
+            position: fixed; /* Siempre visible arriba */
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95); /* Fondo semitransparente */
+            backdrop-filter: blur(10px); /* Efecto vidrio difuminado */
+            border-bottom: 1px solid var(--glass);
+            z-index: 1000; /* Para que quede sobre todo */
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+      
+        .nav-container {
+            max-width: 1200px; /* Para que no se estire demasiado */
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between; /* Logo a la izquierda, menú a la derecha */
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+         .nav-logo h2 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; /* Degradado aplicado al texto */
+            animation: gradientShift 3s ease-in-out infinite; /* Hace que se mueva el color */
+        }
+         .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem; /* Espacio entre los enlaces */
+        }
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--glass);
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+         /* -------- HERO (portada principal) -------- */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(0, 245, 255, 0.1) 0%, var(--dark-bg) 70%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px; /* Espacio por la navbar fija */
+              
+            }
+
+        .hero-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+          .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite; /* Movimiento del degradado */
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5); /* Brillo */
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        
+        /* SECCIONES DEL JUEGO  */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+ /* Línea decorativa debajo del título */
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 100px;
+            height: 3px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        /* Caja central del juego */
+        .game-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-info {
+            margin-bottom: 2rem;
+        }
+
+        .attempts-counter {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .attempts-counter span {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .range-info {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .number-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            width: 120px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .number-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
+        }
+
+        /* Buttons */
+        .btn-holographic {
+            background: var(--holographic);
+            background-size: 200% 200%;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-holographic:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.4);
+        }
+
+        .btn-holographic:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        /* Messages */
+        .message-container {
+            min-height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .message.hot {
+            background: rgba(255, 60, 60, 0.2);
+            color: #ff3c3c;
+            border: 1px solid #ff3c3c;
+        }
+
+        .message.warm {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .message.cold {
+            background: rgba(0, 245, 255, 0.2);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .message.success {
+            background: rgba(0, 255, 140, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .message.error {
+            background: rgba(255, 56, 96, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Previous attempts */
+        .attempts-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .attempt-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .attempt-badge.hot {
+            background: rgba(255, 60, 60, 0.3);
+            color: #ff6b6b;
+        }
+
+        .attempt-badge.warm {
+            background: rgba(255, 165, 0, 0.3);
+            color: #ffb347;
+        }
+
+        .attempt-badge.cold {
+            background: rgba(0, 245, 255, 0.3);
+            color: var(--primary-color);
+        }
+
+        /* Confetti canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(1000px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(10px);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-container {
+                padding: 2rem;
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>GRUPO 3</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="numero-magico01.html" class="nav-link">Número Mágico</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Número Mágico</h1>
+            <p class="hero-subtitle">Adivina el número secreto entre 1 y 50</p>
+        </div>
+    </section>
+
+    <!-- Game Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">¡Pon a prueba tu intuición!</h2>
+            <div class="game-container">
+                <div class="game-info">
+                    <div class="attempts-counter">Intentos: <span id="attempts">0</span>/7</div>
+                    <div class="range-info">El número está entre <strong>1</strong> y <strong>50</strong></div>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" id="guess-input" class="number-input" min="1" max="50" placeholder="1-50">
+                    <button id="guess-btn" class="btn-holographic">Adivinar</button>
+                </div>
+
+                <div class="message-container">
+                    <div id="message" class="message">Ingresa un número para comenzar</div>
+                </div>
+
+                <div class="attempts-list" id="attempts-list">
+                    <!-- Previous attempts will be added here -->
+                </div>
+
+                <button id="restart-btn" class="btn-holographic" style="display: none; margin-top: 2rem;">Jugar de nuevo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Grupo 3 - Universidad O&M</p>
+                    <p>Tecnología y Servicios de Internet | Sección 611</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="numero-magico.html">Número Mágico</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Game variables
+        let secretNumber;
+        let attempts = 0;
+        let maxAttempts = 7;
+        let gameOver = false;
+        let previousGuesses = [];
+
+        // DOM elements
+        const guessInput = document.getElementById('guess-input');
+        const guessBtn = document.getElementById('guess-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const messageEl = document.getElementById('message');
+        const attemptsEl = document.getElementById('attempts');
+        const attemptsList = document.getElementById('attempts-list');
+        const confettiCanvas = document.getElementById('confetti-canvas');
+
+        // Initialize the game
+        function initGame() {
+            secretNumber = Math.floor(Math.random() * 50) + 1;
+            attempts = 0;
+            gameOver = false;
+            previousGuesses = [];
+            
+            updateAttempts();
+            clearMessage();
+            attemptsList.innerHTML = '';
+            restartBtn.style.display = 'none';
+            
+            guessInput.disabled = false;
+            guessBtn.disabled = false;
+            guessInput.value = '';
+            guessInput.focus();
+            
+            console.log('Número secreto:', secretNumber); // For testing
+        }
+
+        // Update attempts counter
+        function updateAttempts() {
+            attemptsEl.textContent = attempts;
+        }
+
+        // Clear message
+        function clearMessage() {
+            messageEl.textContent = 'Ingresa un número entre 1 y 50';
+            messageEl.className = 'message';
+        }
+
+        // Check the user's guess
+        function checkGuess() {
+            if (gameOver) return;
+            
+            const userGuess = parseInt(guessInput.value);
+            
+            // Validate input
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 50) {
+                messageEl.textContent = 'Por favor, ingresa un número válido entre 1 y 50';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            // Check if already guessed
+            if (previousGuesses.includes(userGuess)) {
+                messageEl.textContent = 'Ya intentaste con este número. Prueba con otro.';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            attempts++;
+            updateAttempts();
+            previousGuesses.push(userGuess);
+            
+            // Add to attempts list
+            addAttemptBadge(userGuess);
+            
+            // Check if guess is correct
+            if (userGuess === secretNumber) {
+                winGame();
+                return;
+            }
+            
+            // Give hints
+            const difference = Math.abs(userGuess - secretNumber);
+            let hint = '';
+            
+            if (difference <= 3) {
+                hint = '¡Caliente! Estás muy cerca.';
+                messageEl.className = 'message hot';
+            } else if (difference <= 7) {
+                hint = '¡Tibio! Te estás acercando.';
+                messageEl.className = 'message warm';
+            } else {
+                hint = 'Frío. Sigue intentando.';
+                messageEl.className = 'message cold';
+            }
+            
+            if (userGuess < secretNumber) {
+                messageEl.textContent = `${hint} El número es mayor que ${userGuess}.`;
+            } else {
+                messageEl.textContent = `${hint} El número es menor que ${userGuess}.`;
+            }
+            
+            // Check if game over
+            if (attempts >= maxAttempts) {
+                loseGame();
+            }
+            
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        // Add attempt badge to list
+        function addAttemptBadge(guess) {
+            const difference = Math.abs(guess - secretNumber);
+            let badgeClass = 'cold';
+            
+            if (difference <= 3) {
+                badgeClass = 'hot';
+            } else if (difference <= 7) {
+                badgeClass = 'warm';
+            }
+            
+            const badge = document.createElement('div');
+            badge.className = `attempt-badge ${badgeClass}`;
+            badge.innerHTML = `<i class="fas fa-${guess < secretNumber ? 'arrow-up' : 'arrow-down'}"></i> ${guess}`;
+            
+            attemptsList.appendChild(badge);
+        }
+
+        // Win the game
+        function winGame() {
+            gameOver = true;
+            
+            if (attempts <= 3) {
+                messageEl.textContent = `¡Felicidades! Adivinaste el número ${secretNumber} en solo ${attempts} intentos. ¡Eres un genio!`;
+                messageEl.className = 'message success';
+                createConfetti(true); // Big celebration
+            } else {
+                messageEl.textContent = `¡Bien hecho! Adivinaste el número ${secretNumber} en ${attempts} intentos.`;
+                messageEl.className = 'message success';
+                createConfetti(false); // Small celebration
+            }
+            
+            endGame();
+        }
+
+        // Lose the game
+        function loseGame() {
+            gameOver = true;
+            messageEl.textContent = `¡Game Over! El número era ${secretNumber}. Mejor suerte la próxima vez.`;
+            messageEl.className = 'message error';
+            endGame();
+        }
+
+        // End game
+        function endGame() {
+            guessInput.disabled = true;
+            guessBtn.disabled = true;
+            restartBtn.style.display = 'inline-block';
+        }
+
+        // Create confetti effect
+        function createConfetti(bigCelebration) {
+            const canvas = confettiCanvas;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const confettiCount = bigCelebration ? 300 : 100;
+            const confetti = [];
+            
+            // Create confetti particles
+            for (let i = 0; i < confettiCount; i++) {
+                confetti.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * -canvas.height,
+                    size: Math.random() * 10 + 5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    speed: Math.random() * 3 + 2,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 5 - 2.5
+                });
+            }
+            
+            // Animation function
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                let stillActive = false;
+                
+                confetti.forEach(particle => {
+                    particle.y += particle.speed;
+                    particle.x += Math.sin(particle.y / 30) * 1;
+                    particle.rotation += particle.rotationSpeed;
+                    
+                    if (particle.y < canvas.height) {
+                        stillActive = true;
+                    }
+                    
+                    ctx.save();
+                    ctx.translate(particle.x, particle.y);
+                    ctx.rotate(particle.rotation * Math.PI / 180);
+                    ctx.fillStyle = particle.color;
+                    ctx.fillRect(-particle.size / 2, -particle.size / 2, particle.size, particle.size);
+                    ctx.restore();
+                });
+                
+                if (stillActive) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            
+            animate();
+        }
+
+        // Event listeners
+        guessBtn.addEventListener('click', checkGuess);
+        
+        guessInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+        
+        restartBtn.addEventListener('click', initGame);
+
+        // Initialize the game when page loads
+        window.addEventListener('load', initGame);
+
+        // Responsive navigation
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
+    </script>
+</body>
+</html>

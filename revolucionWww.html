@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Revolución de la World Wide Web - Grupo 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00f5ff;
+            --secondary-color: #0066cc;
+            --accent-color: #ff6b35;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --light-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --metallic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --holographic: linear-gradient(45deg, #00f5ff, #0066cc, #00f5ff);
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 245, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo h2 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--glass);
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(0, 245, 255, 0.1) 0%, var(--dark-bg) 70%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .alt-bg {
+            background: var(--light-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 100px;
+            height: 3px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        /* Content Styles */
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .content-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .content-text ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Image Styles */
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .image-caption {
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 3rem auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--holographic);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 3rem;
+        }
+
+        .timeline-content {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border: 4px solid var(--dark-bg);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+
+        /* Buttons */
+        .btn-holographic {
+            background: var(--holographic);
+            background-size: 200% 200%;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-holographic:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.4);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-text p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(10px) rotate(240deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(10px);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 15px;
+            }
+            
+            .timeline-item:nth-child(odd)::after {
+                right: auto;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>GRUPO 3</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#introduccion" class="nav-link">Introducción</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#componentes" class="nav-link">Componentes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#evolucion" class="nav-link">Evolución</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#impacto" class="nav-link">Impacto</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">La Revolución de la World Wide Web</h1>
+            <p class="hero-subtitle">Análisis del impacto transformador de la WWW en la comunicación y el intercambio de información</p>
+        </div>
+    </section>
+
+    <!-- Introducción Section -->
+    <section id="introduccion" class="section">
+        <div class="container">
+            <h2 class="section-title">Introducción</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <p>La World Wide Web, comúnmente conocida como la Web, representa uno de los avances tecnológicos más significativos de finales del siglo XX. Desarrollada por Tim Berners-Lee en 1989 mientras trabajaba en el CERN (Organización Europea para la Investigación Nuclear), la Web transformó Internet de una red utilizada principalmente por académicos y militares en un recurso global accesible para todos.</p>
+                    
+                    <p>A diferencia de Internet, que es la infraestructura de red subyacente, la Web es un sistema de información que permite acceder a documentos y recursos interconectados a través de enlaces de hipertexto. Esta distinción fundamental es crucial para comprender la verdadera naturaleza de la revolución que la Web representó.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="bernners.jpg" alt="Tim Berners-Lee">
+                            <div class="image-caption">Tim Berners-Lee, creador de la World Wide Web</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="creadorWWW.jpg" alt="Primer servidor web">
+                            <div class="image-caption">Réplica del primer servidor web del CERN</div>
+                        </div>
+                    </div>
+                    
+                    <p>La propuesta original de Berners-Lee, titulada "Information Management: A Proposal", describía un sistema basado en hipertexto para facilitar el intercambio de información entre investigadores. Lo que comenzó como una herramienta para mejorar la colaboración científica se convirtió en pocos años en una plataforma global que transformaría la comunicación, el comercio, la educación y prácticamente todos los aspectos de la sociedad moderna.</p>
+                    
+                    <p>La Web democratizó el acceso a la información, rompiendo barreras geográficas y socioeconómicas, y creó nuevas formas de interacción social que continúan evolucionando hasta nuestros días.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Componentes Section -->
+    <section id="componentes" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Componentes Fundamentales</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <h3>HTTP (Hypertext Transfer Protocol)</h3>
+                    <p>El Protocolo de Transferencia de Hipertexto es el fundamento de la comunicación en la Web. Desarrollado para permitir la transferencia de documentos de hipertexto, HTTP establece cómo los clientes (navegadores) y servidores web deben comunicarse entre sí. Su diseño sin estado (stateless) simplificó enormemente la implementación de servidores, aunque posteriormente se desarrollarían técnicas para mantener el estado de las sesiones.</p>
+                    
+                    <h3>HTML (Hypertext Markup Language)</h3>
+                    <p>El Lenguaje de Marcado de Hipertexto es el lenguaje estándar para crear páginas web. HTML utiliza "etiquetas" para estructurar el contenido, definir enlaces y embebeder recursos multimedia. La simplicidad de HTML fue clave para su rápida adopción, permitiendo que personas sin conocimientos técnicos avanzados pudieran crear y publicar contenido en la Web.</p>
+                    
+                    <h3>URL (Uniform Resource Locator)</h3>
+                    <p>El Localizador Uniforme de Recursos proporciona una dirección única para cada recurso disponible en la Web. Este sistema de direccionamiento permite enlazar documentos entre sí, creando la "telaraña" (web) de información interconectada que da nombre al sistema. Una URL típica incluye el protocolo, el nombre del dominio y la ruta al recurso específico.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="html-image.jpg" alt="Código HTML">
+                            <div class="image-caption">Ejemplo de código HTML temprano</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="esquemaHTTP.jpg" alt="Protocolo HTTP">
+                            <div class="image-caption">Esquema de comunicación HTTP</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Primeros Navegadores Web</h3>
+                    <p>El primer navegador web, llamado WorldWideWeb (posteriormente Nexus), fue desarrollado por el propio Tim Berners-Lee en 1990. Sin embargo, fue Mosaic, lanzado en 1993, el que popularizó la Web al incorporar imágenes junto al texto y estar disponible para los sistemas operativos más comunes de la época. Mosaic sentó las bases para Netscape Navigator y eventualmente para todos los navegadores modernos.</p>
+                    
+                    <h3>Servidores Web</h3>
+                    <p>El primer servidor web corrió en una computadora NeXT en el CERN. El software de servidor web se distribuyó libremente, lo que permitió que instituciones académicas y eventualmente empresas y particulares pudieran alojar sus propios sitios web. Esta decisión de liberar el código fue fundamental para el crecimiento exponencial de la Web.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evolución Section -->
+    <section id="evolucion" class="section">
+        <div class="container">
+            <h2 class="section-title">Evolución Cronológica</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1989</div>
+                        <h3 class="timeline-title">Propuesta inicial</h3>
+                        <p class="timeline-desc">Tim Berners-Lee presenta su propuesta para un sistema de gestión de información basado en hipertexto mientras trabaja en el CERN.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1990</div>
+                        <h3 class="timeline-title">Primeros desarrollos</h3>
+                        <p class="timeline-desc">Se desarrolla el primer navegador/editor WorldWideWeb, el primer servidor web y las primeras páginas web.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1991</div>
+                        <h3 class="timeline-title">Lanzamiento público</h3>
+                        <p class="timeline-desc">Berners-Lee anuncia la World Wide Web en el grupo de noticias alt.hypertext, marcando el inicio de su disponibilidad pública.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1993</div>
+                        <h3 class="timeline-title">CERN libera la Web</h3>
+                        <p class="timeline-desc">El CERN libera la tecnología web al dominio público, lo que acelera su adopción global.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1993</div>
+                        <h3 class="timeline-title">Navegador Mosaic</h3>
+                        <p class="timeline-desc">Se lanza Mosaic, el primer navegador popular que soporta imágenes, haciendo la web más atractiva para el público general.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1994</div>
+                        <h3 class="timeline-title">Netscape Navigator</h3>
+                        <p class="timeline-desc">Se funda Netscape Communications Corporation y se lanza Netscape Navigator, que dominaría el mercado de navegadores durante años.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1995</div>
+                        <h3 class="timeline-title">Internet Explorer</h3>
+                        <p class="timeline-desc">Microsoft lanza Internet Explorer, iniciando la "guerra de navegadores" que impulsaría rápidas innovaciones.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1995</div>
+                        <h3 class="timeline-title">JavaScript</h3>
+                        <p class="timeline-desc">Netscape introduce JavaScript, permitiendo interactividad en las páginas web más allá del contenido estático.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1990s</div>
+                        <h3 class="timeline-title">Expansión comercial</h3>
+                        <p class="timeline-desc">La Web experimenta un crecimiento explosivo con la aparición de motores de búsqueda, comercio electrónico y portales web.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impacto Section -->
+    <section id="impacto" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Impacto y Transformación Global</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <p>La World Wide Web transformó radicalmente la sociedad en múltiples dimensiones, redefiniendo cómo las personas acceden a la información, se comunican, trabajan y participan en la vida pública.</p>
+                    
+                    <h3>Revolución en el Acceso a la Información</h3>
+                    <p>Antes de la Web, acceder a información especializada requería visitar bibliotecas o contar con suscripciones costosas a publicaciones académicas. La Web democratizó el conocimiento, haciendo disponible una cantidad sin precedentes de información de forma gratuita o a bajo costo para cualquier persona con conexión a Internet.</p>
+                    
+                    <h3>Transformación de las Comunicaciones</h3>
+                    <p>La Web introdujo nuevas formas de comunicación que trascendieron las barreras geográficas y temporales. El correo electrónico web, los foros de discusión y posteriormente las redes sociales crearon comunidades globales alrededor de intereses compartidos, independientemente de la ubicación física de sus participantes.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="web1991.jpg" alt="Crecimiento de la Web">
+                            <div class="image-caption">Web desde 1991</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="redes-sociales.jpg" alt="Impacto social">
+                            <div class="image-caption">La Web creó nuevas formas de interacción social</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Nacimiento de la Economía Digital</h3>
+                    <p>La Web permitió el surgimiento del comercio electrónico, transformando las prácticas comerciales globales. Empresas como Amazon y eBay demostraron el potencial de vender productos en línea, mientras que Google creó un nuevo modelo de negocio basado en publicidad contextual. La "economía de la atención" se convirtió en un motor económico central del siglo XXI.</p>
+                    
+                    <h3>Cambios en la Educación</h3>
+                    <p>El acceso a recursos educativos se transformó radicalmente con la Web. Bibliotecas digitales, cursos en línea, tutoriales y materiales de referencia se hicieron disponibles globalmente. La Web facilitó el aprendizaje autodirigido y la educación continua, rompiendo barreras institucionales y geográficas.</p>
+                    
+                    <h3>Transformación de los Medios de Comunicación</h3>
+                    <p>La prensa, la radio y la televisión tradicionales se vieron complementadas y eventualmente desafiadas por medios digitales. Los blogs, podcasts y medios sociales permitieron que cualquier persona pudiera convertirse en creador de contenido, democratizando la producción y distribución de noticias y entretenimiento.</p>
+                    
+                    <h3>Impacto Político y Social</h3>
+                    <p>La Web ha jugado un papel crucial en movimientos sociales y políticos, facilitando la organización ciudadana y la circulación de información no controlada por gobiernos o corporaciones. Desde las primeras comunidades en línea hasta las revoluciones impulsadas por redes sociales, la Web ha demostrado ser una herramienta poderosa para el cambio social.</p>
+                    
+                    <h3>Desafíos y Consideraciones Éticas</h3>
+                    <p>La revolución de la Web también trajo consigo nuevos desafíos: la brecha digital, cuestiones de privacidad, desinformación, cibercrimen y la concentración de poder en grandes empresas tecnológicas. Estos problemas continúan evolucionando y representan los mayores retos para el futuro de la Web.</p>
+                    
+                    <p>La World Wide Web representa quizás la innovación más transformadora de las últimas décadas, creando un ecosistema global de información e interacción que continúa reinventándose. Su impacto perdura en cada aspecto de la vida moderna, desde cómo trabajamos y aprendemos hasta cómo nos relacionamos y participamos en la sociedad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Grupo 3 - Universidad O&M</p>
+                    <p>Tecnología y Servicios de Internet | Sección 611</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="#introduccion">Introducción</a>
+                    <a href="#componentes">Componentes</a>
+                    <a href="#evolucion">Evolución</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el menú hamburguesa
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
+
+        // Efecto de aparición para los elementos al hacer scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-content, .image-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

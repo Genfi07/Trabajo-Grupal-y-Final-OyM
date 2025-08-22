@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Hoy: De la Web 1.0 a la Web 3.0 - Grupo 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00f5ff;
+            --secondary-color: #0066cc;
+            --accent-color: #ff6b35;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --light-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --metallic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --holographic: linear-gradient(45deg, #00f5ff, #0066cc, #00f5ff);
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 245, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo h2 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--glass);
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(0, 245, 255, 0.1) 0%, var(--dark-bg) 70%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .alt-bg {
+            background: var(--light-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 100px;
+            height: 3px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        /* Content Styles */
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .content-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .content-text ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Image Styles */
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .image-caption {
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1.2rem;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: var(--holographic);
+            color: white;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        /* Web Era Cards */
+        .era-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .era-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .era-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+
+        .era-card.web1::before {
+            background: linear-gradient(90deg, #ff6b35, #ff9d6c);
+        }
+
+        .era-card.web2::before {
+            background: linear-gradient(90deg, #0066cc, #00f5ff);
+        }
+
+        .era-card.web3::before {
+            background: linear-gradient(90deg, #764ba2, #667eea);
+        }
+
+        .era-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+        }
+
+        .era-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .era-card.web1 h3 {
+            color: #ff6b35;
+        }
+
+        .era-card.web2 h3 {
+            color: #00f5ff;
+        }
+
+        .era-card.web3 h3 {
+            color: #764ba2;
+        }
+
+        .era-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn-holographic {
+            background: var(--holographic);
+            background-size: 200% 200%;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-holographic:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.4);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-text p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(10px) rotate(240deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(10px);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .era-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>GRUPO 3</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#introduccion" class="nav-link">Introducción</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#web1" class="nav-link">Web 1.0</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#web2" class="nav-link">Web 2.0</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#web3" class="nav-link">Web 3.0</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Internet Hoy: De la Web 1.0 a la Web 3.0</h1>
+            <p class="hero-subtitle">Perspectiva moderna sobre la evolución de la web hacia tecnologías descentralizadas</p>
+        </div>
+    </section>
+
+    <!-- Introducción Section -->
+    <section id="introduccion" class="section">
+        <div class="container">
+            <h2 class="section-title">Introducción</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <p>La evolución de la World Wide Web representa una de las transformaciones tecnológicas más significativas de las últimas décadas. Desde sus inicios como una colección de documentos estáticos interconectados hasta la visión actual de una web semántica y descentralizada, Internet ha experimentado cambios profundos que han redefinido cómo interactuamos con la información y entre nosotros.</p>
+                    
+                    <p>Esta transición no ha sido meramente técnica, sino también social, económica y filosófica. Cada etapa de la evolución web ha respondido a las limitaciones de la anterior mientras abría nuevas posibilidades para la innovación y la creación de valor. La Web 1.0 estableció los fundamentos, la Web 2.0 democratizó la creación de contenido, y la Web 3.0 promete devolver el control a los usuarios mediante tecnologías descentralizadas.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="internet-evolucion.jpg" alt="Evolución web">
+                            <div class="image-caption">Evolución de la web a través de las décadas</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="web0.5.jpg" alt="Tecnologías web">
+                            <div class="image-caption">Tecnologías que impulsan la evolución web</div>
+                        </div>
+                    </div>
+                    
+                    <p>Comprender esta evolución es esencial para anticipar el futuro de Internet y las oportunidades que presentará. La Web 3.0, con su enfoque en descentralización, inteligencia artificial y experiencias inmersivas, está sentando las bases para la próxima generación de aplicaciones y servicios digitales que transformarán nuevamente nuestra relación con la tecnología.</p>
+                    
+                    <p>Este análisis examina las características definitorias de cada era web, las tecnologías que las hicieron posibles y las implicaciones sociales y económicas de estas transiciones, proporcionando una visión completa del viaje de la web desde sus inicios hasta su futuro potencial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web 1.0 Section -->
+    <section id="web1" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Web 1.0: La Web de Solo Lectura</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <div class="era-cards">
+                        <div class="era-card web1">
+                            <h3>Características Principales</h3>
+                            <p>La Web 1.0 (1991-2004) fue la primera encarnación de la World Wide Web, caracterizada por sitios web estáticos con contenido de solo lectura. Los usuarios consumían información pero tenían capacidades limitadas para interactuar o crear contenido.</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Tecnologías Fundamentales</h3>
+                    <p>La Web 1.0 se basó en tecnologías básicas pero revolucionarias para su época: HTML para la estructuración de contenido, HTTP para la transferencia de datos y URLs para el direccionamiento de recursos. Estas tecnologías sentaron las bases para todo lo que vendría después.</p>
+                    
+                    <h3>Modelo de Contenido</h3>
+                    <p>El contenido en la Web 1.0 era creado principalmente por empresas, organizaciones y técnicos especializados. Los sitios web funcionaban como folletos digitales o catálogos de información, con actualizaciones infrecuentes y poca interacción con los visitantes.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="web-1.jpg" alt="Web 1.0">
+                            <div class="image-caption">Interfaz típica de la Web 1.0 - estática y minimalista</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="htmlweb0.1.jpg" alt="HTML básico">
+                            <div class="image-caption">Código HTML simple característico de la Web 1.0</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Limitaciones y Oportunidades</h3>
+                    <p>Las principales limitaciones de la Web 1.0 (interactividad mínima, contenido estático, creación centralizada) eventualmente se convirtieron en las oportunidades que impulsarían la transición hacia la Web 2.0. La necesidad de una web más dinámica y participativa se hizo evidente a medida que crecía la base de usuarios y sus expectativas.</p>
+                    
+                    <h3>Legado y Relevancia</h3>
+                    <p>Aunque superada en muchos aspectos, la Web 1.0 estableció principios fundamentales que siguen siendo relevantes hoy: la importancia de estándares abiertos, la accesibilidad de la información y la potencia de la hipertextualidad para conectar conocimientos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web 2.0 Section -->
+    <section id="web2" class="section">
+        <div class="container">
+            <h2 class="section-title">Web 2.0: La Web Social y Participativa</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <div class="era-cards">
+                        <div class="era-card web2">
+                            <h3>Características Principales</h3>
+                            <p>La Web 2.0 (2004-presente) transformó Internet de una plataforma de consumo a una de participación. Los usuarios se convirtieron en creadores de contenido, las redes sociales florecieron y surgieron nuevas formas de colaboración y compartición.</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Tecnologías Habilitadoras</h3>
+                    <p>La transición a la Web 2.0 fue impulsada por tecnologías como AJAX (que permitía actualizaciones de página asíncronas), APIs abiertas, y frameworks de desarrollo que facilitaban la creación de aplicaciones web ricas e interactivas.</p>
+                    
+                    <h3>Modelos de Negocio</h3>
+                    <p>La Web 2.0 vio el surgimiento de nuevos modelos de negocio basados en la publicidad dirigida, la economía de la atención y el valor derivado de los datos de los usuarios. Plataformas como Google, Facebook y YouTube demostraron el potencial económico de la participación masiva de usuarios.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="redes-sociales.jpg" alt="Redes sociales">
+                            <div class="image-caption">Plataformas sociales característics de la Web 2.0</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="aplicaciones Web.jpg" alt="Aplicaciones web">
+                            <div class="image-caption">Aplicaciones web interactivas de la era 2.0</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Impacto Social y Cultural</h3>
+                    <p>La Web 2.0 democratizó la creación de contenido, permitiendo que voces previamente marginadas encontraran audiencia. Sin embargo, también trajo desafíos como la desinformación, las cámaras de eco y la concentración de poder en grandes empresas tecnológicas.</p>
+                    
+                    <h3>La Economía de Plataformas</h3>
+                    <p>El modelo de plataforma se convirtió en dominante, con empresas que actuaban como intermediarios entre productores y consumidores de contenido. Este modelo creó enormes valoraciones empresariales pero también generó preocupaciones sobre monopolios y prácticas anticompetitivas.</p>
+                    
+                    <h3>Preparando el Terreno para la Web 3.0</h3>
+                    <p>Las limitaciones de la Web 2.0—especialmente la centralización, las preocupaciones sobre privacidad y la captura de valor por plataformas en lugar de creadores—han impulsado la búsqueda de alternativas que culminarían en la visión de la Web 3.0.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web 3.0 Section -->
+    <section id="web3" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Web 3.0: La Web Descentralizada y Semántica</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <div class="era-cards">
+                        <div class="era-card web3">
+                            <h3>Características Principales</h3>
+                            <p>La Web 3.0 (en desarrollo) representa la próxima evolución hacia una web descentralizada, semántica y orientada a la inteligencia artificial. Busca devolver el control a los usuarios mediante tecnologías como blockchain y protocolos abiertos.</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Tecnologías Fundamentales</h3>
+                    <p>La Web 3.0 se construye sobre varias tecnologías emergentes: blockchain para la descentralización y confianza, inteligencia artificial para la comprensión semántica, IoT para la integración físico-digital, y gráficos de conocimiento para la organización de información.</p>
+                    
+                    <h3>Descentralización y Propiedad</h3>
+                    <p>Un principio central de la Web 3.0 es la descentralización, que permite a los usuarios poseer sus datos, identidad y activos digitales. Las tecnologías blockchain y los tokens no fungibles (NFTs) permiten nuevos modelos de propiedad y valor digital.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="blockchain.jpg" alt="Blockchain">
+                            <div class="image-caption">Tecnología blockchain como base de la Web 3.0</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="experiencia3.0.jpg" alt="Realidad virtual">
+                            <div class="image-caption">Experiencias inmersivas en la Web 3.0</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Web Semántica e Inteligencia Artificial</h3>
+                    <p>La Web 3.0 pretende que las máquinas comprendan el significado de la información, permitiendo búsquedas más inteligentes, recomendaciones personalizadas y automatización compleja. Esto se logra mediante datos estructurados y algoritmos de IA.</p>
+                    
+                    <h3>Economía Tokenizada</h3>
+                    <p>La Web 3.0 introduce nuevos modelos económicos basados en tokens y criptoactivos, permitiendo la captura de valor por parte de creadores y usuarios en lugar de intermediarios. Los conceptos de finanzas descentralizadas (DeFi) y organizaciones autónomas descentralizadas (DAOs) son componentes clave.</p>
+                    
+                    <h3>Desafíos y Consideraciones</h3>
+                    <p>La transición a la Web 3.0 enfrenta importantes desafíos: escalabilidad de tecnologías blockchain, experiencia de usuario, regulación, y la necesidad de superar la inercia de las plataformas establecidas de la Web 2.0.</p>
+                    
+                    <h3>El Futuro de Internet</h3>
+                    <p>La Web 3.0 promete una internet más abierta, justa y equitativa, pero su forma final sigue emergiendo. Su éxito dependerá de la adopción generalizada, la solución de problemas técnicos complejos y la creación de experiencias que superen significativamente las ofertas actuales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparación Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Comparativa entre Web 1.0, 2.0 y 3.0</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Aspecto</th>
+                                <th>Web 1.0</th>
+                                <th>Web 2.0</th>
+                                <th>Web 3.0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Periodo</td>
+                                <td>1991-2004</td>
+                                <td>2004-Presente</td>
+                                <td>En desarrollo</td>
+                            </tr>
+                            <tr>
+                                <td>Interacción</td>
+                                <td>Lectura solamente</td>
+                                <td>Lectura y escritura</td>
+                                <td>Lectura, escritura y propiedad</td>
+                            </tr>
+                            <tr>
+                                <td>Arquitectura</td>
+                                <td>Centralizada</td>
+                                <td>Centralizada</td>
+                                <td>Descentralizada</td>
+                            </tr>
+                            <tr>
+                                <td>Tecnologías clave</td>
+                                <td>HTML, HTTP</td>
+                                <td>AJAX, APIs, RSS</td>
+                                <td>Blockchain, IA, IoT</td>
+                            </tr>
+                            <tr>
+                                <td>Contenido</td>
+                                <td>Empresas y organizaciones</td>
+                                <td>Usuarios y comunidades</td>
+                                <td>Usuarios con propiedad verificable</td>
+                            </tr>
+                            <tr>
+                                <td>Modelo económico</td>
+                                <td>Publicidad tradicional</td>
+                                <td>Economía de atención/publicidad dirigida</td>
+                                <td>Tokenización/criptoeconomía</td>
+                            </tr>
+                            <tr>
+                                <td>Ejemplos</td>
+                                <td>Sitios web estáticos, directorios</td>
+                                <td>Redes sociales, wikis, blogs</td>
+                                <td>dApps, DAOs, metaversos</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>Transición Continua</h3>
+                    <p>Es importante destacar que estas evoluciones no son reemplazos abruptos sino transiciones graduales. Elementos de la Web 1.0 todavía existen hoy, y la Web 3.0 se está construyendo sobre los cimientos de la Web 2.0, no necesariamente reemplazándola por completo.</p>
+                    
+                    <h3>Implicaciones para el Futuro</h3>
+                    <p>La transición hacia la Web 3.0 tiene profundas implicaciones para la privacidad, la propiedad digital, la gobernanza en línea y la estructura económica de Internet. Representa un cambio paradigmático en cómo concebimos la relación entre usuarios, creadores y plataformas.</p>
+                    
+                    <div class="btn-container">
+                        <a href="index.html" class="btn-holographic">Volver a la Página Principal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Grupo 3 - Universidad O&M</p>
+                    <p>Tecnología y Servicios de Internet | Sección 611</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="#introduccion">Introducción</a>
+                    <a href="#web1">Web 1.0</a>
+                    <a href="#web2">Web 2.0</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el menú hamburguesa
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
+
+        // Efecto de aparición para los elementos al hacer scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.era-card, .image-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

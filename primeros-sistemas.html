@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Primeros Sistemas de Información en Internet - Grupo 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00f5ff;
+            --secondary-color: #0066cc;
+            --accent-color: #ff6b35;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --light-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --metallic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --holographic: linear-gradient(45deg, #00f5ff, #0066cc, #00f5ff);
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 245, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo h2 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--glass);
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(0, 245, 255, 0.1) 0%, var(--dark-bg) 70%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--holographic);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .alt-bg {
+            background: var(--light-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 100px;
+            height: 3px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        /* Content Styles */
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .content-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .content-text ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Image Styles */
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .image-caption {
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 3rem auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--holographic);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 3rem;
+        }
+
+        .timeline-content {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border: 4px solid var(--dark-bg);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+
+        /* Buttons */
+        .btn-holographic {
+            background: var(--holographic);
+            background-size: 200% 200%;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-holographic:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.4);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-text p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(10px) rotate(240deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(10px);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 15px;
+            }
+            
+            .timeline-item:nth-child(odd)::after {
+                right: auto;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>GRUPO 3</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#introduccion" class="nav-link">Introducción</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#sistemas" class="nav-link">Sistemas Clave</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#evolucion" class="nav-link">Evolución</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#impacto" class="nav-link">Impacto</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Los Primeros Sistemas de Información en Internet</h1>
+            <p class="hero-subtitle">Exploración de los fundamentos tecnológicos que dieron origen a los sistemas de información digitales</p>
+        </div>
+    </section>
+
+    <!-- Introducción Section -->
+    <section id="introduccion" class="section">
+        <div class="container">
+            <h2 class="section-title">Introducción</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <p>Los primeros sistemas de información en Internet sentaron las bases para la revolución digital que transformaría por completo la forma en que accedemos, compartimos y procesamos la información. Estos sistemas pioneros, desarrollados en las décadas de 1960 a 1980, establecieron los protocolos y arquitecturas que permitirían el intercambio global de datos.</p>
+                    
+                    <p>Antes de la World Wide Web, Internet era principalmente una red utilizada por académicos, investigadores y agencias gubernamentales. Los sistemas de información de esta época estaban diseñados para facilitar el intercambio de conocimiento científico, la colaboración en investigación y el acceso a recursos computacionales remotos.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="ps2.jpg" alt="Computadora antigua con terminal">
+                            <div class="image-caption">Terminal de computadora de los años 70</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="ps3.jpg" alt="Primeros servidores">
+                            <div class="image-caption">Servidores primitivos de los años 80</div>
+                        </div>
+                    </div>
+                    
+                    <p>Estos sistemas iniciales pueden considerarse los precursores directos de los modernos servicios web, aplicaciones en la nube y plataformas de colaboración que utilizamos hoy en día. Su diseño y funcionalidad, aunque limitados según los estándares actuales, establecieron principios fundamentales que continúan siendo relevantes en el desarrollo de sistemas de información contemporáneos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sistemas Clave Section -->
+    <section id="sistemas" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Sistemas Clave de la Era Temprana</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <h3>ARPANET: La Precursora</h3>
+                    <p>ARPANET, desarrollada por la Agencia de Proyectos de Investigación Avanzada (ARPA) del Departamento de Defensa de EE.UU., fue la primera red de conmutación de paquetes y el embrión de lo que eventualmente se convertiría en Internet. Implementada en 1969, conectaba inicialmente cuatro universidades estadounidenses.</p>
+                    
+                    <h3>Correo Electrónico (Email)</h3>
+                    <p>El correo electrónico, creado por Ray Tomlinson en 1971, fue una de las primeras aplicaciones killer de ARPANET. Originalmente diseñado para permitir a los investigadores enviarse mensajes entre diferentes computadoras en la red, revolucionó la comunicación académica y sentó las bases para los sistemas de mensajería modernos.</p>
+                    
+                    <h3>FTP (File Transfer Protocol)</h3>
+                    <p>Desarrollado en 1971, el Protocolo de Transferencia de Archivos permitió a los usuarios de ARPANET enviar y recibir archivos entre sistemas conectados. FTP fue fundamental para la colaboración científica, permitiendo compartir grandes conjuntos de datos y software de investigación.</p>
+                    
+                    <h3>Telnet</h3>
+                    <p>Telnet, desarrollado en 1969, fue uno de los primeros protocolos de red que permitía a los usuarios acceder de forma remota a otra computadora y trabajar en ella como si estuvieran físicamente presentes. Este protocolo sentó las bases para el acceso remoto y la administración de sistemas.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="protocoloFTP.jpg" alt="Protocolo FTP">
+                            <div class="image-caption">Diagrama del protocolo FTP original</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="correo.jpg" alt="Primer correo electrónico">
+                            <div class="image-caption">Réplica del primer mensaje de correo electrónico</div>
+                        </div>
+                    </div>
+                    
+                    <h3>USENET</h3>
+                    <p>Creado en 1979, USENET fue uno de los primeros sistemas de tablones de anuncios distribuidos que permitía a los usuarios publicar y leer mensajes en categorías organizadas llamadas "newsgroups". Fue un precursor crucial de los foros en línea modernos y las redes sociales.</p>
+                    
+                    <h3>Gopher</h3>
+                    <p>Desarrollado en 1991 en la Universidad de Minnesota, Gopher fue un protocolo de comunicación que organizaba la información en menús jerárquicos, facilitando el acceso a documentos y recursos en Internet antes de que la World Wide Web se popularizara.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evolución Section -->
+    <section id="evolucion" class="section">
+        <div class="container">
+            <h2 class="section-title">Evolución Cronológica</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1969</div>
+                        <h3 class="timeline-title">Nacimiento de ARPANET</h3>
+                        <p class="timeline-desc">Primera conexión exitosa entre UCLA y Stanford que marca el inicio de la red que eventualmente se convertiría en Internet.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1971</div>
+                        <h3 class="timeline-title">Primer correo electrónico</h3>
+                        <p class="timeline-desc">Ray Tomlinson envía el primer mensaje de correo electrónico entre dos computadoras y elige el símbolo @ para separar el nombre del usuario y la máquina.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1973</div>
+                        <h3 class="timeline-title">Primera conexión internacional</h3>
+                        <p class="timeline-desc">ARPANET establece su primera conexión internacional con el University College of London en Inglaterra y el Royal Radar Establishment en Noruega.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1974</div>
+                        <h3 class="timeline-title">TCP/IP</h3>
+                        <p class="timeline-desc">Vint Cerf y Bob Kahn publican la especificación del protocolo TCP/IP, que se convertiría en el estándar para las comunicaciones en Internet.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1979</div>
+                        <h3 class="timeline-title">USENET</h3>
+                        <p class="timeline-desc">Nace USENET, el primer sistema de discusión distribuido que permite a los usuarios intercambiar mensajes en grupos de noticias.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1983</div>
+                        <h3 class="timeline-title">DNS</h3>
+                        <p class="timeline-desc">Se implementa el Sistema de Nombres de Dominio (DNS), que permite asignar nombres legibles a las direcciones IP numéricas.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1989</div>
+                        <h3 class="timeline-title">Propuesta de la WWW</h3>
+                        <p class="timeline-desc">Tim Berners-Lee presenta su propuesta para lo que eventualmente se convertiría en la World Wide Web mientras trabajaba en el CERN.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impacto Section -->
+    <section id="impacto" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Impacto y Legado</h2>
+            <div class="content-container">
+                <div class="content-text">
+                    <p>Los primeros sistemas de información en Internet sentaron las bases tecnológicas y conceptuales para la era digital actual. Su impacto se puede observar en múltiples dimensiones:</p>
+                    
+                    <h3>Revolución en las Comunicaciones</h3>
+                    <p>El correo electrónico transformó radicalmente la forma en que las personas se comunicaban a distancia, reduciendo los tiempos de espera de días a segundos y allanando el camino para las formas instantáneas de comunicación que disfrutamos hoy.</p>
+                    
+                    <h3>Colaboración Científica Global</h3>
+                    <p>Estos sistemas permitieron por primera vez que investigadores de diferentes partes del mundo colaboraran en tiempo real, compartieran datos y accedieran a recursos computacionales remotos, acelerando el avance científico.</p>
+                    
+                    <div class="image-container">
+                        <div class="image-card">
+                            <img src="investigadores.jpg" alt="Colaboración científica">
+                            <div class="image-caption">Investigadores colaborando mediante sistemas tempranos de Internet</div>
+                        </div>
+                        <div class="image-card">
+                            <img src="arphanet.jpg" alt="Evolución de Internet">
+                            <div class="image-caption">Evolución desde ARPANET hasta la Internet moderna</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Modelo para Sistemas Futuros</h3>
+                    <p>Los protocolos y arquitecturas desarrollados durante esta era (TCP/IP, FTP, SMTP) se han mantenido como fundamentos de Internet, demostrando la solidez de su diseño inicial.</p>
+                    
+                    <h3>Democratización de la Información</h3>
+                    <p>Aunque inicialmente limitada a círculos académicos y gubernamentales, la infraestructura creada eventualmente permitiría el acceso global a la información que caracteriza a Internet hoy en día.</p>
+                    
+                    <h3>Lecciones para el Desarrollo Tecnológico</h3>
+                    <p>El éxito de estos sistemas tempranos demuestra la importancia de desarrollar estándares abiertos, protocolos interoperables y arquitecturas escalables, principios que continúan guiando el desarrollo de tecnologías de Internet.</p>
+                    
+                    <p>El legado de estos primeros sistemas de información perdura en cada aspecto de Internet moderno. Desde la forma en que intercambiamos correos electrónicos hasta cómo transferimos archivos y accedemos a información remota, las innovaciones pioneras de las décadas de 1960 a 1980 continúan siendo la columna vertebral de nuestra experiencia digital.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Grupo 3 - Universidad O&M</p>
+                    <p>Tecnología y Servicios de Internet | Sección 611</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="#introduccion">Introducción</a>
+                    <a href="#sistemas">Sistemas</a>
+                    <a href="#evolucion">Evolución</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el menú hamburguesa
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
+
+        // Efecto de aparición para los elementos al hacer scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-content, .image-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
